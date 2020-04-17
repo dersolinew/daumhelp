@@ -13,33 +13,27 @@ export default class ProductScreen extends Component {
       dragAndDrop: {
         productDragged: null,
       },
-      products: [
-        {
-          id: 1,
-          nome: 'Playstation 4',
-          quantidade: 10,
-          valorUnitario: 2000
-        },
-        {
-          id: 2,
-          nome: 'Xbox One',
-          quantidade: 10,
-          valorUnitario: 1500
-        },
-        {
-          id: 3,
-          nome: 'Nintendo Switch',
-          quantidade: 5,
-          valorUnitario: 1800
-        },
-        {
-          id: 4,
-          nome: 'Playstation 5',
-          quantidade: 5,
-          valorUnitario: 5000
-        }
-      ]
+      products: [],
+      filter: {
+        products: []
+      },
+      nextId: null,
+      reusableIds: []
     };
+  }
+
+  componentDidMount() {
+    let nextId = parseInt(localStorage.getItem('nextId') || 1);
+    let reusableIds = JSON.parse(localStorage.getItem('reusableIds')) || [];
+    let products = JSON.parse(localStorage.getItem('products')) || [];
+    console.log({products});
+    this.setState({
+      products,
+      filter: {
+        products,
+      },
+      nextId
+    });
   }
 
   onDragStart = (e) => {
@@ -59,27 +53,82 @@ export default class ProductScreen extends Component {
     let newProductsOrdered = changeProductsOrder(productDragged, targetProduct, this.state.products)
 
     this.setState({
-      products: newProductsOrdered
+      products: newProductsOrdered,
+      filter: {
+        products: newProductsOrdered
+      }
     });
   }
 
   onDelete = (productId) => {
     let newListWithoutProduct = this.state.products.filter((product) => product.id != productId);
+    let reusableIds = [...this.state.reusableIds];
+
+    reusableIds.push(productId);
+    reusableIds.sort().reverse();
 
     this.setState({
-      products: newListWithoutProduct
+      products: newListWithoutProduct,
+      reusableIds,
+      filter: {
+        products: newListWithoutProduct,
+      }
+    }, () => {
+      localStorage.setItem('products', JSON.stringify(this.state.products));
+      localStorage.setItem('reusableIds', JSON.stringify(this.state.reusableIds));
     });
   }
 
+  onAdd = (product) => {
+    let nextId = this.state.nextId;
+    let reusableIds = [...this.state.reusableIds];
+    let products = [...this.state.products];
+
+    if (reusableIds.length === 0) {
+      product.id = nextId++;
+    } else {
+      product.id = parseInt(reusableIds.pop());
+    }
+
+    products.push(product);
+    products = products.sort((a, b) => a.id - b.id);
+  
+    this.setState({
+      products,
+      nextId,
+      filter: {
+        products,
+      },
+      reusableIds
+    }, () => {
+      localStorage.setItem('products', JSON.stringify(this.state.products));
+      localStorage.setItem('nextId', this.state.nextId);
+      localStorage.setItem('reusableIds', JSON.stringify(this.state.reusableIds));
+    });
+  }
+
+  onMakeSearch = (name) => {
+    let productsThatMatch = this.state.products.filter((product) => product.name.toLowerCase().startsWith(name.toLowerCase()));
+
+    this.setState({
+      filter: {
+        products: productsThatMatch
+      }
+    });
+  }
+ 
   render() {
     return (
       <div className="App">
-        <Header />
+        <Header onMakeSearch={this.onMakeSearch} />
         
         <section className="products-container">
-          <h1>Products</h1>
-          <Form />
-          <List products={this.state.products} onDragStart={this.onDragStart} onDrop={this.onDrop} onDelete={this.onDelete} />
+          <Form onAdd={this.onAdd} />
+          <h1>Produtos</h1>
+          <List products={this.state.filter.products} 
+            onDragStart={this.onDragStart} 
+            onDrop={this.onDrop} 
+            onDelete={this.onDelete} />
         </section>
       </div>
     );

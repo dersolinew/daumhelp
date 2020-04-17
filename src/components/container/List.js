@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import DraggableRow, { grabbingDragabble }from '../drag-and-drop/DraggableRow';
+import DraggableRow from '../drag-and-drop/DraggableRow';
+
 
 export default class List extends Component {
 
@@ -19,7 +20,8 @@ export default class List extends Component {
               <th>Nome</th>
               <th>Quantidade em estoque</th>
               <th>Preço unitário</th>
-              <th></th>
+              <th>Valor Total</th>
+              <th>Remover</th>
             </tr>
           </thead>
           <tbody>
@@ -28,9 +30,10 @@ export default class List extends Component {
               return (
                 <DraggableRow key={produto.id} id={produto.id} onDragStart={this.props.onDragStart} onDrop={this.props.onDrop}>
                   <td>{produto.id}</td>
-                  <td>{produto.nome}</td>
-                  <td>{produto.quantidade}</td>
-                  <td>{produto.valorUnitario}</td>
+                  <td>{produto.name}</td>
+                  <td>{produto.amount}</td>
+                  <td>{produto.unitPrice.toLocaleString("pt-BR", {style: 'currency', currency: 'BRL'})}</td>
+                  <td>{(produto.unitPrice * produto.amount).toLocaleString("pt-BR", {style: 'currency', currency: 'BRL'})}</td>
                   <td><a onClick={this.clickRemove}>Remover</a></td>
                 </DraggableRow>
               );

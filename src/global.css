@@ -17,14 +17,19 @@ header{
   max-width: 855px;
   height: 80px;
   margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #FFF;
 }
+.header-container img{
+  width: 100%;
+}
 .header-container input{
   width: 200px;
   height: 30px;
+  margin-left: 2%;
   padding: 0 10px;
   border-radius: 7px;
   border: none;
@@ -33,15 +38,41 @@ header{
   width: 100%;
   max-width: 855px;
   margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: column;
   text-align: center;
 }
 .products-container h1{
   width: 100%;
   margin: 30px 0;
+}
+.products-container .new-products{
+  margin-top: 30px;
+}
+.products-container .new-products h2{
+  margin-bottom: 20px;
+}
+.products-container .new-products form input{
+    width: 180px;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 7px;
+    border: 1px solid #a2a2a2;
+    margin-right: 1%;
+}
+.products-container .new-products form .button{
+  transition: .4s all;
+  margin-top: 10px;
+  border: 2px solid #412085;
+}
+.products-container .new-products form .button:hover{
+  background-color: #412085;
+  transition: .4s all;
+  color: #fff;
+  cursor: pointer;
 }
 .products-container .products{
   width: 100%;
@@ -51,17 +82,20 @@ header{
 .products-container .products table{
   display: inline-block;
   text-align: center;
+  margin-bottom: 40px;
 }
 .products-container .products table thead tr{
   display: inline-block;
-  
+  width: 100%
+}
+.products-container .products table thead tr th{
+  width: 16.6%;
 }
 .products-container .products table tbody tr{
   display: block;
-  margin-bottom: 20px;
-  box-shadow: 0px 0px 15px #a2a2a2;
-  border-radius: 7px;
-  height: 50px;
+  padding: 10px 0;
+  border-bottom: 1px solid #a2a2a2;
+  width: 100%;
 }
 .products-container .products table tbody tr:hover{
   cursor: grab;
@@ -70,5 +104,50 @@ header{
   cursor: grabbing;
 }
 .products-container .products table tbody tr td{
-  
+  width: 15%;
+}
+.products-container .products table tbody tr td a{
+  cursor: pointer;
+}
+.products-container .products table tbody tr td a:hover{
+  transition: .4s all;
+  background-color: #412085;
+  color: #fff;
+  padding: 10px;
+  border-radius: 7px;
+}
+.new_products{
+  width: 100%; 
+  max-width: 855px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.new_products h2{
+  width: 100%;
+}
+.new_products .add_product{
+  width: 100%;
+}
+
+@media(max-width: 600px){
+  .header-container{
+    padding: 0 5px;
+  }
+  .products-container{
+    padding: 0 5px;
+    font-size: 14px;
+  }
+}
+
+@media(max-width: 500px){
+  .products-container{
+    font-size: 12px
+  }
+}
+
+@media(max-width: 350px){
+  .products-container{
+    font-size: 9px;
+  }
 }
